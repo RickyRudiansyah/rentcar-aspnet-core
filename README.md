@@ -4,6 +4,30 @@ RentCar adalah aplikasi web penyewaan mobil berbasis **ASP.NET Core MVC** yang d
 Project ini mencakup sistem autentikasi, pencarian mobil, transaksi sewa, hingga manajemen pembayaran dengan **Entity Framework Core (Code-First)**.
 
 ---
+## 📸 Screenshot Aplikasi
+
+### Homepage & Pencarian Mobil
+![Homepage](screenshots/01_homepage_search.png)
+
+### Filter, Sorting & Pagination
+![Filter & Sort](screenshots/02_filter_sort_pagination.png)
+
+### Registrasi dengan Validasi
+![Register](screenshots/33_register_validation.png)
+
+### Login User
+![Login](screenshots/04_login_page.png)
+
+### Detail Mobil & Transaksi Sewa
+![Detail Sewa](screenshots/07_car_detail_rental.png)
+
+### Riwayat Penyewaan & Pembayaran
+![Riwayat](screenshots/08_rental_history_unpaid.png)
+![Riwayat](screenshots/09_rental_history_paid.png)
+
+### Halaman Kontak
+![Kontak](screenshots/10_contact_page.png)
+
 
 ## ✨ Fitur Utama
 
