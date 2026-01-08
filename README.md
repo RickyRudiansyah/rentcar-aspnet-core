@@ -13,7 +13,7 @@ Project ini mencakup sistem autentikasi, pencarian mobil, transaksi sewa, hingga
 ![Filter & Sort](screenshots/02_filter_sort_pagination.png)
 
 ### Registrasi dengan Validasi
-![Register](screenshots/33_register_validation.png)
+![Register](screenshots/033_register_validation.png)
 
 ### Login User
 ![Login](screenshots/04_login_page.png)
