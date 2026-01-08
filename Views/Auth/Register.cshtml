@@ -1,0 +1,69 @@
+@model RentCar.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Registrasi";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi ke RentCar</title>
+    <link rel="stylesheet" href="~/css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>Registrasi ke RentCar</h1>
+
+            <form asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label asp-for="Name">Nama Lengkap</label>
+                    <input asp-for="Name" type="text" placeholder="Masukkan nama lengkap Anda" />
+                    <span asp-validation-for="Name" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email" placeholder="Masukkan email Anda" />
+                    <span asp-validation-for="Email" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" placeholder="Masukkan password Anda" />
+                    <span asp-validation-for="Password" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Re-Password</label>
+                    <input asp-for="ConfirmPassword" type="password" placeholder="Masukkan kembali password Anda" />
+                    <span asp-validation-for="ConfirmPassword" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PhoneNumber">Nomor Telefon</label>
+                    <input asp-for="PhoneNumber" type="text" placeholder="Masukkan nomor telefon Anda" />
+                    <span asp-validation-for="PhoneNumber" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Address">Alamat</label>
+                    <input asp-for="Address" type="text" placeholder="Masukkan alamat Anda" />
+                    <span asp-validation-for="Address" class="error-message"></span>
+                </div>
+
+                <button type="submit" class="btn-submit">Registrasi</button>
+
+                <p class="auth-link">
+                    Sudah punya akun? <a asp-action="Login">Login disini</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

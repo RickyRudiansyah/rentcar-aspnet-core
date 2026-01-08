@@ -1,0 +1,227 @@
+@{
+    ViewData["Title"] = "Sewa Mobil";
+    var car = ViewBag.Car as RentCar.Models.MsCar;
+    var customer = ViewBag.Customer as RentCar.Models.MsCustomer;
+    DateTime pickupDate = ViewBag.PickupDate;
+    DateTime returnDate = ViewBag.ReturnDate;
+    int totalDays = ViewBag.TotalDays;
+    decimal totalPrice = ViewBag.TotalPrice;
+}
+
+<div class="rental-page">
+    <h1>Sewa Mobil</h1>
+
+    <div class="rental-container">
+        <!-- Car Image Slider -->
+        <div class="car-slider">
+            @if (car.CarImages != null && car.CarImages.Any())
+            {
+                var images = car.CarImages.ToList();
+                <div class="slider-wrapper">
+                    <button class="slider-btn prev-btn" onclick="prevSlide()">&#10094; Prev</button>
+                    <div class="slider-image">
+                        <img id="carImage" src="@images.First().ImageLink" alt="@car.Name" />
+                    </div>
+                    <button class="slider-btn next-btn" onclick="nextSlide()">Next &#10095;</button>
+                </div>
+                <script>
+                    var images = [@Html.Raw(string.Join(",", images.Select(i => $"\"{i.ImageLink}\"")))];
+                    var currentIndex = 0;
+
+                    function showSlide(index) {
+                        if (index >= images.length) currentIndex = 0;
+                        if (index < 0) currentIndex = images.length - 1;
+                        document.getElementById('carImage').src = images[currentIndex];
+                    }
+
+                    function nextSlide() {
+                        currentIndex++;
+                        showSlide(currentIndex);
+                    }
+
+                    function prevSlide() {
+                        currentIndex--;
+                        showSlide(currentIndex);
+                    }
+                </script>
+            }
+            else
+            {
+                <img src="/images/no-image.png" alt="No Image" />
+            }
+        </div>
+
+        <!-- Car Info Table -->
+        <div class="rental-info">
+            <h2>Informasi Mobil</h2>
+            <table class="info-table">
+                <tr>
+                    <th>Tipe Mobil</th>
+                    <td>@car.Model</td>
+                </tr>
+                <tr>
+                    <th>Nama Mobil</th>
+                    <td>@car.Name @car.Year</td>
+                </tr>
+                <tr>
+                    <th>Transmisi</th>
+                    <td>@(car.Transmission == "AT" ? "Automatic" : "Manual")</td>
+                </tr>
+                <tr>
+                    <th>Jumlah Penumpang</th>
+                    <td>@car.NumberOfCarSeats Penumpang</td>
+                </tr>
+                <tr>
+                    <th>Nama Penyewa</th>
+                    <td>@customer.Name (@customer.Email)</td>
+                </tr>
+                <tr>
+                    <th>Tanggal Sewa</th>
+                    <td>@pickupDate.ToString("dd MMMM yyyy") sampai @returnDate.ToString("dd MMMM yyyy")</td>
+                </tr>
+                <tr>
+                    <th>Harga Sewa</th>
+                    <td>Rp. @car.PricePerDay.ToString("N0") / hari</td>
+                </tr>
+                <tr>
+                    <th>Total Hari</th>
+                    <td>@totalDays Hari</td>
+                </tr>
+                <tr class="total-row">
+                    <th>Total Harga Sewa</th>
+                    <td><strong>Rp. @totalPrice.ToString("N0")</strong></td>
+                </tr>
+            </table>
+
+            <form method="post" asp-action="Create">
+                <input type="hidden" name="carId" value="@car.CarId" />
+                <input type="hidden" name="pickupDate" value="@pickupDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="returnDate" value="@returnDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="confirm" value="true" />
+                <button type="submit" class="btn-sewa">Sewa</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rental-page {
+        padding: 30px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .rental-page h1 {
+        text-align: center;
+        color: #e91e63;
+        margin-bottom: 30px;
+    }
+
+    .rental-container {
+        background-color: #fce4ec;
+        border-radius: 15px;
+        padding: 30px;
+    }
+
+    .car-slider {
+        margin-bottom: 30px;
+    }
+
+    .slider-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .slider-image {
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    .slider-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .slider-btn {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .slider-btn:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .rental-info {
+        background-color: white;
+        border-radius: 10px;
+        padding: 25px;
+    }
+
+    .rental-info h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .info-table tr {
+        border-bottom: 1px solid #eee;
+    }
+
+    .info-table th,
+    .info-table td {
+        padding: 12px 10px;
+        text-align: left;
+    }
+
+    .info-table th {
+        width: 40%;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .info-table td {
+        color: #666;
+    }
+
+    .total-row {
+        background-color: #fff9c4;
+    }
+
+    .total-row td {
+        color: #e91e63;
+        font-size: 18px;
+    }
+
+    .btn-sewa {
+        width: 100%;
+        padding: 15px;
+        background-color: #f8bbd9;
+        color: #c2185b;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    .btn-sewa:hover {
+        background-color: #f48fb1;
+    }
+</style>

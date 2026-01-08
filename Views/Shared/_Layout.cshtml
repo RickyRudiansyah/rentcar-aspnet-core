@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RentCar</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <button class="hamburger-btn" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <a href="/" class="brand">RentCar</a>
+            </div>
+            <div class="nav-right">
+                @if (Context.Session.GetString("CustomerId") != null)
+                {
+                    <span class="user-greeting">Hai, @Context.Session.GetString("CustomerName")</span>
+                    <a href="/Auth/Logout" class="btn-logout">Logout</a>
+                }
+                else
+                {
+                    <a href="/Auth/Login" class="btn-login">Login</a>
+                    <a href="/Auth/Register" class="btn-register">Registrasi</a>
+                }
+            </div>
+        </nav>
+
+        <!-- Hamburgertt Menu Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="close-btn" onclick="toggleMenu()">&times;</button>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/Rental/History">Riwayat Penyewaan</a></li>
+                <li><a href="/Home/Contact">Kontak Kami</a></li>
+            </ul>
+        </div>
+        <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <p>&copy; 2024 RentCar App. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

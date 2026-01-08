@@ -1,0 +1,100 @@
+﻿@model RentCar.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero">
+    <h1>Selamat Datang di Rental Mobil Kami</h1>
+
+    <div class="search-box">
+        <form method="get" asp-action="Index">
+            <div class="search-fields">
+                <div class="field">
+                    <label>Pickup Date:</label>
+                    <input type="date" name="PickupDate" value="@Model.Search.PickupDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="field">
+                    <label>Return Date:</label>
+                    <input type="date" name="ReturnDate" value="@Model.Search.ReturnDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="field">
+                    <label>Filter Tahun Pembuatan</label>
+                    <select name="YearFilter">
+                        <option value="">Semua Tahun</option>
+                        @foreach (var year in Model.AvailableYears)
+                        {
+                            <option value="@year" selected="@(Model.Search.YearFilter == year)">@year</option>
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn-search">Cari</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@if (Model.HasSearched)
+{
+    <section class="car-results">
+        @if (Model.Cars.Any())
+        {
+            <div class="sort-section">
+                <label>Sortir Berdasarkan</label>
+                <form method="get" asp-action="Index" id="sortForm">
+                    <input type="hidden" name="PickupDate" value="@Model.Search.PickupDate?.ToString("yyyy-MM-dd")" />
+                    <input type="hidden" name="ReturnDate" value="@Model.Search.ReturnDate?.ToString("yyyy-MM-dd")" />
+                    <input type="hidden" name="YearFilter" value="@Model.Search.YearFilter" />
+                    <select name="SortBy" onchange="document.getElementById('sortForm').submit()">
+                        <option value="price_asc" selected="@(Model.Search.SortBy == "price_asc")">Harga Terendah - Tertinggi</option>
+                        <option value="price_desc" selected="@(Model.Search.SortBy == "price_desc")">Harga Tertinggi - Terendah</option>
+                        <option value="year_desc" selected="@(Model.Search.SortBy == "year_desc")">Tahun Terbaru</option>
+                        <option value="year_asc" selected="@(Model.Search.SortBy == "year_asc")">Tahun Terlama</option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="car-grid">
+                @foreach (var car in Model.Cars)
+                {
+                    <div class="car-card">
+                        <div class="car-image">
+                            @if (car.CarImages.Any())
+                            {
+                                <img src="@car.CarImages.First().ImageLink" alt="@car.Name" />
+                            }
+                            else
+                            {
+                                <img src="/images/no-image.png" alt="No Image" />
+                            }
+                        </div>
+                        <div class="car-info">
+                            <h3>@car.Name @car.Transmission @car.Year</h3>
+                            <p class="car-price">Harga: Rp. @car.PricePerDay.ToString("N0") / hari</p>
+                            <a href="/Rental/Create?carId=@car.CarId&pickupDate=@Model.Search.PickupDate?.ToString("yyyy-MM-dd")&returnDate=@Model.Search.ReturnDate?.ToString("yyyy-MM-dd")" 
+                               class="btn-rent">Sewa Sekarang</a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="pagination">
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <a href="?PickupDate=@Model.Search.PickupDate?.ToString("yyyy-MM-dd")&ReturnDate=@Model.Search.ReturnDate?.ToString("yyyy-MM-dd")&YearFilter=@Model.Search.YearFilter&SortBy=@Model.Search.SortBy&Page=@i"
+                           class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-results">
+                <p>Tidak ada mobil yang tersedia untuk periode yang dipilih.</p>
+            </div>
+        }
+    </section>
+}
